@@ -1,0 +1,10 @@
+Screen {
+    layout: vertical;
+    overflow-y: auto;
+}
+
+.box {
+    width: 100%;
+    height: 10;
+    border: solid green;
+}
