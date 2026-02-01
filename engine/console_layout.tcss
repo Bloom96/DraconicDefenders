@@ -1,0 +1,13 @@
+Screen {
+    layout: grid;
+    grid-size: 4; 
+    /* You might need to adjust your main grid rows/cols here later */
+}
+
+#hp_bar {
+    width: 100%;
+}
+
+#hp_bar > .bar--bar {
+    color: red; /* This changes the filled portion to red */
+}
