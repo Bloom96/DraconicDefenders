@@ -1,4 +1,5 @@
 from textual.app import App, ComposeResult
+from textual.containers import Horizontal, Vertical
 from textual.widgets import Static, Welcome, Button, Label
 from textual import events
 
@@ -67,7 +68,7 @@ class QuestionApp(App[str]):
 
 # endregion
 
-
+#region vertical layout
 class VerticalLayoutExample(App):
     CSS_PATH = "layout.tcss"
 
@@ -75,8 +76,28 @@ class VerticalLayoutExample(App):
         yield Static("One", classes="box")
         yield Static("Two", classes="box")
         yield Static("Three", classes="box")
+# endregion
+
+#region Utility container layout
+class UtilityContainersExample(App):
+    CSS_PATH = "utility_containers.tcss"
+
+    def compose(self) -> ComposeResult:
+        yield Horizontal(
+            Vertical(
+                Static("One"),
+                Static("Two"),
+                classes = "column",
+            ),
+            Vertical(
+                Static("Three"),
+                Static("Four"),
+                classes="column",
+            ),
+        )
+# endregion
 
 # runs the application
 if __name__ == "__main__":
-    app = VerticalLayoutExample()
+    app = UtilityContainersExample()
     app.run()
