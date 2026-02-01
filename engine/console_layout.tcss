@@ -1,17 +1,28 @@
 Screen {
     layout: grid;
-    /* First column is 10% wide, second is 90% */
-    grid-columns: 30% 70%;
-    /* First row is 10% high, second is 90% */
-    grid-rows: 30% 70%;
+    /* Explicitly say: 2 columns, 1 row */
+    grid-size: 2 1; 
+    
+    /* First column 30%, second column takes the rest (1fr) */
+    grid-columns: 30% 1fr;
+    
+    /* IMPORTANT: Change this to 100% or 1fr. 
+       You want one single row that fills the whole screen height. */
+    grid-rows: 1fr; 
 }
 /* --- THE BOX --- */
 #mini_status {
     width: 100%;
-    height: 100%;
+    height: auto;
     border: solid green;
     /* Remove padding/gutters so we use every pixel */
     padding: 0;
+}
+
+#input_window {
+    width: 100%;
+    height: 100%;
+    border: solid blue; /* Visual guide so you can see it working */
 }
 
 /* --- THE ROWS --- */

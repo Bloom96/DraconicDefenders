@@ -1,7 +1,8 @@
 from textual.app import App, ComposeResult
-from textual.widgets import Static, Label, ProgressBar
+from textual.widgets import Static, Label, ProgressBar, Input
 from textual.containers import Container, Horizontal
 from textual.reactive import reactive  
+
 
 class MainConsole(App):
     CSS_PATH = "console_layout.tcss"
@@ -9,27 +10,30 @@ class MainConsole(App):
     def compose(self) -> ComposeResult:
         #setting up the progress bar to it's default value
         with Container(id="mini_status"):
-            
             with Horizontal(classes="stat_row"):
                 yield Label("Name: XYZ")
                 yield Label("Level: 5", classes="right")
 
             with Horizontal(classes="stat_row"):
-                yield(Static("Vitality: 5/5"))
-                yield(Static("XP: 90/100", classes = "right"))
+                yield Label("Race: Draconic")
+                yield Label("XP: 90/100", classes = "right")
 
             with Horizontal(classes="stat_row"):
                 yield Label("Class: Wizard")
-                yield Label("Race: Human", classes="right")
+                yield Label("Vitality: 5/5", classes="right")
             
             with Horizontal(classes="stat_row"):
                 yield Static("HP: ", classes="label_hp_mana")
                 yield ProgressBar(total = 100, show_eta=False, id="hp_bar")
-                
+
             with Horizontal(classes="stat_row"):
                 yield Static("Mana: ", classes="label_hp_mana")
                 yield ProgressBar(total = 100, show_eta=False, id="mana_bar")
-    
+
+        with Container(id="input_window"):
+            with Horizontal(classes="input"):
+                yield Input(placeholder ="Interact with the character here")
+
     def on_mount(self):
         hp_bar = self.query_one("#hp_bar", ProgressBar)
         mana_bar = self.query_one("#mana_bar", ProgressBar)
