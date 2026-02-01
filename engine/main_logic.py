@@ -68,7 +68,7 @@ class QuestionApp(App[str]):
 
 # endregion
 
-#region vertical layout
+#region Vertical layout
 class VerticalLayoutExample(App):
     CSS_PATH = "layout.tcss"
 
@@ -97,7 +97,26 @@ class UtilityContainersExample(App):
         )
 # endregion
 
+
+# region Composing with context managers
+class UtilityContextManager(App):
+    
+    CSS_PATH = "utility_context.tcss"
+
+        
+    def compose(self) -> ComposeResult:
+            with Horizontal():
+                with Vertical(classes="column"):
+                    yield Static("One")
+                    yield Static("Two")
+                with Vertical(classes="column"):
+                    yield Static("Three")
+                    yield Static("Four")
+
+
+# endregion
+
 # runs the application
 if __name__ == "__main__":
-    app = UtilityContainersExample()
+    app = UtilityContextManager()
     app.run()
