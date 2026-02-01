@@ -1,6 +1,6 @@
 from textual.app import App, ComposeResult
-from textual.widgets import Static, ContentSwitcher, DataTable, Digits, ProgressBar
-from textual.containers import Container
+from textual.widgets import Static, Label, ProgressBar
+from textual.containers import Container, Horizontal
 from textual.reactive import reactive  
 
 class MainConsole(App):
@@ -8,8 +8,27 @@ class MainConsole(App):
 
     def compose(self) -> ComposeResult:
         #setting up the progress bar to it's default value
-        yield ProgressBar(total = 100, show_eta=False, id="hp_bar")
-        yield ProgressBar(total = 100, show_eta=False, id="mana_bar")
+        with Container(id="mini_status"):
+            
+            with Horizontal(classes="stat_row"):
+                yield Label("Name: XYZ")
+                yield Label("Level: 5", classes="right")
+
+            with Horizontal(classes="stat_row"):
+                yield(Static("Vitality: 5/5"))
+                yield(Static("XP: 90/100", classes = "right"))
+
+            with Horizontal(classes="stat_row"):
+                yield Label("Class: Wizard")
+                yield Label("Race: Human", classes="right")
+            
+            with Horizontal(classes="stat_row"):
+                yield Static("HP: ", classes="label_hp_mana")
+                yield ProgressBar(total = 100, show_eta=False, id="hp_bar")
+                
+            with Horizontal(classes="stat_row"):
+                yield Static("Mana: ", classes="label_hp_mana")
+                yield ProgressBar(total = 100, show_eta=False, id="mana_bar")
     
     def on_mount(self):
         hp_bar = self.query_one("#hp_bar", ProgressBar)
@@ -20,7 +39,7 @@ class MainConsole(App):
 
     def spell_cast(self, spell_cost):
         mana_bar = self.query_one("#mana_bar", ProgressBar)
-        mana_bar -= spell_cost
+        mana_bar.progress -= spell_cost
 
     # taking the damage is getting accounted for here
     def take_damage(self, amount):

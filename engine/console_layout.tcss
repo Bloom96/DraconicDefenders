@@ -1,13 +1,61 @@
 Screen {
     layout: grid;
-    grid-size: 4; 
-    /* You might need to adjust your main grid rows/cols here later */
+    /* First column is 10% wide, second is 90% */
+    grid-columns: 30% 70%;
+    /* First row is 10% high, second is 90% */
+    grid-rows: 30% 70%;
 }
-
-#hp_bar {
+/* --- THE BOX --- */
+#mini_status {
     width: 100%;
+    height: 100%;
+    border: solid green;
+    /* Remove padding/gutters so we use every pixel */
+    padding: 0;
 }
 
-#hp_bar > .bar--bar {
-    color: red; /* This changes the filled portion to red */
+/* --- THE ROWS --- */
+.stat_row {
+    /* REQUIRED: Change this to 1 so two rows fit in 2-3 lines of height */
+    height: 1;      
+    width: 100%;
+  
 }
+
+/* Make both labels grow to fill the row evenly */
+.stat_row Label {
+    width: 1fr;
+}
+
+/* Make the second label push its text to the right side */
+.stat_row .right {
+    text-align: right;
+}
+
+/* --- THE label_leftS --- */
+.label_hp_mana {
+    /* REDUCE THIS: 10% width is too small for 6 chars. 
+       Use 3 chars so the bar has room to exist. */      
+    width: 6;
+    content-align: left middle;
+    text-style: bold;
+    color: $text;
+}
+.label_left{
+    content-align: left middle;
+}
+.label_right{
+    content-align: right middle;
+}
+
+/* --- THE BARS --- */
+#hp_bar, #mana_bar {
+    width: 1fr;
+    height: 1;
+    /* Remove margins */
+    margin: 0;
+}
+
+/* --- COLOR OVERRIDES (Keep these) --- */
+#hp_bar .bar--bar, #hp_bar .bar--complete { color: red; }
+#mana_bar .bar--bar, #mana_bar .bar--complete { color: cyan; }
