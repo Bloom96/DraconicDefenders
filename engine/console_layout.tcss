@@ -1,72 +1,205 @@
+/* 
+============================================================================
+ GLOBAL SCREEN LAYOUT
+============================================================================
+*/
 Screen {
+    /* 'grid' lets us divide the screen into precise rows and columns */
     layout: grid;
-    /* Explicitly say: 2 columns, 1 row */
+    
+    /* grid-size: columns rows; -> 2 columns wide, 1 row high */
     grid-size: 2 1; 
     
-    /* First column 30%, second column takes the rest (1fr) */
-    grid-columns: 30% 1fr;
+    /* 
+       Define column widths:
+       30% -> Left column takes 30% of screen width
+       1fr -> Right column takes "1 fraction" of remaining space (all the rest)
+       
+       EXAMPLE: To make the left side bigger, change 30% to 50%
+    */
+    grid-columns: 30% 1fr; 
     
-    /* IMPORTANT: Change this to 100% or 1fr. 
-       You want one single row that fills the whole screen height. */
+    /* 1fr -> The row takes up 100% of the screen height */
     grid-rows: 1fr; 
 }
-/* --- THE BOX --- */
-#mini_status {
-    width: 100%;
-    height: auto;
-    border: solid green;
-    /* Remove padding/gutters so we use every pixel */
-    padding: 0;
-}
 
-#input_window {
+/* 
+============================================================================
+ LEFT COLUMN
+============================================================================
+*/
+#left_column {
     width: 100%;
     height: 100%;
-    border: solid blue; /* Visual guide so you can see it working */
+    /* No border here, because we put borders on the boxes inside it */
 }
 
-/* --- THE ROWS --- */
-.stat_row {
-    /* REQUIRED: Change this to 1 so two rows fit in 2-3 lines of height */
-    height: 1;      
+/* 
+   .box is a CLASS. It applies to Status, Inventory, and Quests.
+   This saves us from writing the same border code 3 times.
+*/
+.box {
     width: 100%;
-  
+    
+    /* 
+       1fr means "Share available height equally". 
+       Since there are 3 boxes, each gets 33.3% height automatically.
+    */
+    height: 1fr; 
+    
+    border: solid green; /* The default border color */
+    margin-bottom: 1;    /* Creates a 1-line gap between boxes */
+    padding: 0 1;        /* 0 padding top/bottom, 1 char padding left/right */
+     overflow-y: auto;   /*forces a scrollbar to appear*/
 }
 
-/* Make both labels grow to fill the row evenly */
+/* Style for the headers inside the boxes (e.g., "--- STATUS ---") */
+.box_title {
+    width: 100%;
+    text-align: center;
+    color: green;
+    text-style: bold;
+}
+
+/* 
+   ID OVERRIDES
+   After applying the .box class, we can target specific IDs to change just that one.
+*/
+
+/* Example: Make status box slightly taller (40%) and others smaller */
+#mini_status { 
+    height: 25%; 
+}
+
+/* Example: Give Inventory a different border color */
+#inventory_box { 
+    height: 25%; 
+    border: solid yellow; 
+}
+
+/* Example: Give Quests a purple border */
+#quest_box { 
+    height: 20%; 
+    border: solid purple; 
+    /* 
+    This makes the scrollbar 'vertical' color match the border.
+    Format: scrollbar-color: <thumb> <track>;
+    */
+    scrollbar-color: purple black;
+    
+    /* Width of the scrollbar (default is usually 1) */
+    scrollbar-size-vertical: 1; 
+}
+
+#target_box { 
+    height: 1fr; 
+    border: solid red; 
+
+    scrollbar-color: purple black;
+}
+
+/* 
+============================================================================
+ RIGHT COLUMN (CONSOLE)
+============================================================================
+*/
+#right_column {
+    width: 100%;
+    height: 100%;
+    border: solid blue;
+    
+    /* 'vertical' layout stacks the Log on top and Input on bottom */
+    layout: vertical; 
+}
+
+/* The history window */
+#game_log {
+    width: 100%;
+    
+    /* 1fr here means "Take all height NOT used by the input box" */
+    height: 1fr; 
+    
+    /* Use $surface to use the terminal's default background color */
+    background: $surface; 
+    color: $text;
+    
+    /* Adds a separator line between log and input */
+    border-bottom: solid blue; 
+}
+
+/* The input typing area */
+#console_input {
+    /* 
+       'dock: bottom' ensures this stays stuck to the bottom of the container 
+       even if the window resizes.
+    */
+    dock: bottom; 
+    
+    width: 100%;
+    height: 3;     /* Fixed height of 3 lines */
+    border: none;  /* Remove border so it looks seamless with the log */
+}
+
+/* 
+============================================================================
+ UTILITY STYLES (Small tweaks for internals)
+============================================================================
+*/
+
+/* Each row in the status window */
+.stat_row {
+    height: 1;      /* Force it to be 1 line high */
+    width: 100%;
+}
+
+/* Standard Labels inside stats */
 .stat_row Label {
-    width: 1fr;
+    width: 1fr;     /* Take up half the space */
 }
 
-/* Make the second label push its text to the right side */
+/* Labels with class "right" align text to right side */
 .stat_row .right {
     text-align: right;
 }
 
-/* --- THE label_leftS --- */
+/* Labels for HP/MP text (e.g., "HP:") */
 .label_hp_mana {
-    /* REDUCE THIS: 10% width is too small for 6 chars. 
-       Use 3 chars so the bar has room to exist. */      
-    width: 6;
-    content-align: left middle;
+    width: 4; 
     text-style: bold;
-    color: $text;
-}
-.label_left{
-    content-align: left middle;
-}
-.label_right{
-    content-align: right middle;
 }
 
-/* --- THE BARS --- */
+.tar_label_hp_mana {
+    width: 4; 
+    text-style: bold;
+}
+
+/* Progress Bar sizing */
 #hp_bar, #mana_bar {
     width: 1fr;
-    height: 1;
-    /* Remove margins */
-    margin: 0;
+    margin: 0; /* Remove default margins so they fit tight */
 }
 
-/* --- COLOR OVERRIDES (Keep these) --- */
-#hp_bar .bar--bar, #hp_bar .bar--complete { color: red; }
-#mana_bar .bar--bar, #mana_bar .bar--complete { color: cyan; }
+#tar_hp_bar, #tar_mana_bar {
+    width: 1fr;
+    margin: 0; /* Remove default margins so they fit tight */
+}
+
+/* 
+   PROGRESS BAR COLORS 
+   Textual bars have sub-components: .bar--bar (empty) and .bar--complete (filled)
+*/
+#hp_bar .bar--bar, #hp_bar .bar--complete { 
+    color: red; 
+}
+
+#mana_bar .bar--bar, #mana_bar .bar--complete { 
+    color: cyan; 
+}
+
+#tar_hp_bar .bar--bar, #tar_hp_bar .bar--complete { 
+    color: red; 
+}
+
+#tar_mana_bar .bar--bar, #tar_mana_bar .bar--complete { 
+    color: cyan; 
+}
