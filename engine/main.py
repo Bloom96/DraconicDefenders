@@ -1,25 +1,13 @@
 from textual.app import App, ComposeResult
 from textual.widgets import Static, Label, ProgressBar, Input, RichLog
 from textual.containers import Container, Horizontal, Vertical, VerticalScroll 
-
+from .objects.MyChar import MyChar
+from .objects.Maps import Maps
 
 # This is the main class that runs your application.
 # It inherits from 'App', which gives it all the standard Textual functionality.
 
-class MyCharacters:
-    def __init__(self, name, hp, mp, level, char_class, char_race):
-        self.Name = name
-        self.HP = hp
-        self.MP = mp
-        self.Level = level
-        self.Char_class = char_class
-        self.Char_race = char_race
-    
-    # CHANGE: Only do math here. Do not try to touch the UI.
-    def take_damage(self, amount):
-        self.HP -= amount
-        if self.HP < 0: 
-            self.HP = 0 # Prevent negative HP
+
 class MainConsole(App):
     
     # Link to the CSS file that controls the look (colors, sizes, layout).
@@ -27,8 +15,8 @@ class MainConsole(App):
 
     def __init__(self):
         super().__init__()
-        self.player_char = MyCharacters("Reinhard", 100, 100, 4, "Wizard", "Human")
-        self.target_char = MyCharacters("Bo'hsa", 100, 0, 2, "Rouge", "ELf")
+        self.player_char = MyChar("Reinhard", 100, 100, 4, "Wizard", "Human")
+        self.target_char = MyChar("Bo'hsa", 100, 0, 2, "Rouge", "ELf")
 
     # --------------------------------------------------------------------------
     # COMPOSE: This is where you build the UI structure (The Skeleton)
